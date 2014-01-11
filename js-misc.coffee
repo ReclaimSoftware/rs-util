@@ -1,3 +1,7 @@
+intervalSet = (x, y) ->
+  setInterval y, x
+
+
 sum = (arr) ->
   result = 0
   for x in arr
@@ -10,6 +14,7 @@ timeoutSet = (x, y) ->
 
 
 module.exports = {
+  intervalSet
   sum
   timeoutSet
 }
