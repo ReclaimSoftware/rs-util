@@ -5,6 +5,11 @@ sum = (arr) ->
   result
 
 
+timeoutSet = (x, y) ->
+  setTimeout y, x
+
+
 module.exports = {
   sum
+  timeoutSet
 }
