@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "async": "0.2.9",
+    "coffee-script": "1.6.3",
+    "mocha": "1.13.0",
+    "underscore": "1.5.2"
+  }
+}
