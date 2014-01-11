@@ -6,7 +6,12 @@ rstrip = (string) ->
   string.match(/^((.|[\r\n])*?)[ \t\n\r]*$/)[1]
 
 
+strip = (s) ->
+  lstrip rstrip s
+
+
 module.exports = {
   lstrip
   rstrip
+  strip
 }
