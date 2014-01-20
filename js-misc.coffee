@@ -21,6 +21,37 @@ intervalSet = (x, y) ->
   setInterval y, x
 
 
+# Note: after your callback returns,
+# the buffer it was passed will be overwritten.
+# `.copy` it or lose it.
+read_fixed_size_chunks = (stream, chunk_size, c) ->
+  chunk = new Buffer chunk_size
+  chunk_pos = 0
+  stream.on 'data', (new_data) ->
+    new_data_remaining = new_data.length
+
+    # Can we emit one?
+    needed_for_next = chunk_size - chunk_pos
+    if needed_for_next <= new_data.length
+      new_data.copy chunk, chunk_pos, 0, needed_for_next
+      c chunk
+      new_data_remaining -= needed_for_next
+      chunk_pos = 0
+
+    # The buffer from the past is empty.
+    # Emit chunks (if any) from the remainder of new_data.
+    while new_data_remaining >= chunk_size
+      start = (new_data.length - new_data_remaining)
+      c new_data.slice start, start + chunk_size
+      new_data_remaining -= chunk_size
+
+    # Save remainder to buffer
+    if new_data_remaining > 0
+      start = new_data.length - new_data_remaining
+      new_data.copy chunk, chunk_pos, start, start + new_data_remaining
+      chunk_pos += new_data_remaining
+
+
 read_stream = (stream, c) ->
   buffers = []
   stream.on 'data', (data) -> buffers.push data
@@ -44,6 +75,7 @@ timeoutSet = (x, y) ->
 module.exports = {
   camel_to_snake
   intervalSet
+  read_fixed_size_chunks
   read_stream
   sum
   timeoutSet
