@@ -15,10 +15,14 @@ respond_json = (res, code, x) ->
   res.end JSON.stringify x, null, 2
 
 
+respond_not_found = (res) ->
+  res.status(404).render('404')
+
+
 respond_storage_file = ({req, res, storage, key, mime}) ->
   {range} = req.headers
   storage.size key, (e, size) ->
-    return res.status(404).render('404') if e and e.notFound
+    return respond_not_found res if e and e.notFound
     return respond_error res, e if e
 
     # No Range header?
@@ -54,6 +58,7 @@ module.exports = {
   respond_error
   respond_js
   respond_json
+  respond_not_found
   respond_storage_file
   respond_plain
 }
