@@ -15,17 +15,16 @@ respond_json = (res, code, x) ->
   res.end JSON.stringify x, null, 2
 
 
-respond_local_file = ({req, res, local_path, mime}) ->
+respond_storage_file = ({req, res, storage, key, mime}) ->
   {range} = req.headers
-  fs.stat local_path, (e, stats) ->
+  storage.size key, (e, size) ->
+    return res.status(404).render('404') if e and e.notFound
     return respond_error res, e if e
-    return respond_error res, 'not a file' if not stats.isFile()
-    {size} = stats
 
     # No Range header?
     if not range
       res.writeHead 200, {'Content-Type': mime, 'Content-Length': size}
-      fs.createReadStream(local_path).pipe res
+      storage.createReadStream(key).pipe res
       return
 
     m = range.match /^bytes=([0-9]+)-/
@@ -43,7 +42,7 @@ respond_local_file = ({req, res, local_path, mime}) ->
       'Content-Length': res_size
       'Content-Range': "bytes #{start}-#{end}/#{size}"
     }
-    fs.createReadStream(local_path, {start, end}).pipe res
+    storage.createReadStream(key, {start, end}).pipe res
 
 
 respond_plain = (res, code, text) ->
@@ -55,6 +54,6 @@ module.exports = {
   respond_error
   respond_js
   respond_json
-  respond_local_file
+  respond_storage_file
   respond_plain
 }
