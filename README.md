@@ -11,9 +11,13 @@
 
 ```coffee
 camel_to_snake "FooBar"   #-> "foo_bar"
+
 lstrip " foo \n\r\t"      #-> "foo \n\r\t"
 rstrip " foo \n\r\t"      #-> " foo"
 strip "  foo \n\r\t"      #-> "foo"
+
+ljust "123", 5, " "       #-> "123  "
+rjust "123", 5, "0"       #-> "00123"
 ```
 
 
