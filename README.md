@@ -18,6 +18,8 @@ strip "  foo \n\r\t"      #-> "foo"
 
 ljust "123", 5, " "       #-> "123  "
 rjust "123", 5, "0"       #-> "00123"
+
+lsplit_to_fixed_sized_chunks "1234567", 3   #-> ["123", "456", "7"]
 ```
 
 

@@ -4,6 +4,15 @@ ljust = (string, n, char) ->
   string
 
 
+lsplit_to_fixed_sized_chunks = (string, chunk_size) ->
+  chunks = []
+  i = 0
+  while i < string.length
+    chunks.push string.substr i, chunk_size
+    i += chunk_size
+  chunks
+
+
 lstrip = (string) ->
   string.match(/^[ \t\n\r]*((.|[\r\n])*)$/)[1]
 
@@ -24,6 +33,7 @@ strip = (s) ->
 
 module.exports = {
   ljust
+  lsplit_to_fixed_sized_chunks
   lstrip
   rjust
   rstrip
