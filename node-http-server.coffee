@@ -2,7 +2,7 @@ respond_error = (res, error="") ->
   console.log '----- Error, 500-ing -----'
   console.log error
   console.log '--------------------------'
-  respond_plain res, 500, "Internal Error.\n"
+  res.status(500).render('500')
 
 
 respond_js = (res, code, js) ->
