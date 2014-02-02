@@ -11,8 +11,12 @@ get_info = (expected_code, url, c) ->
 
 
 post_info = (expected_code, url, info, c) ->
-  req_body = JSON.stringify info, null, 2
-  headers = {'Content-Type': 'application/json'}
+  json = JSON.stringify info, null, 2
+  req_body = new Buffer json, 'utf8'
+  headers = {
+    'Content-Type': 'application/json'
+    'Content-Length': req_body.length
+  }
   _request 'POST', expected_code, url, req_body, headers, _resParsing(c)
 
 
