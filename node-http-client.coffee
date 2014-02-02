@@ -18,11 +18,11 @@ post_info = (expected_code, url, info, c) ->
 
 _resParsing = (c) ->
   (e, res, body) ->
-    return c e if e
+    return c e, res, body if e
     try
       info = JSON.parse body
     catch e
-      return c new Error "Error decoding JSON"
+      return c (new Error "Error decoding JSON"), res, body
     c null, res, info
 
 
@@ -40,8 +40,11 @@ _request = (method, expected_code, _url, req_body, headers, c) ->
     bufs = []
     res.on 'data', (data) -> bufs.push data
     res.on 'end', () ->
-      return c new Error "code #{res.statusCode}" if res.statusCode != expected_code
       body = Buffer.concat bufs
+      res.data = body
+      if res.statusCode != expected_code
+        e = new Error "Unexpected status code: #{res.statusCode}"
+        return c e, res
       c null, res, body
   if req_body
     req.end req_body
