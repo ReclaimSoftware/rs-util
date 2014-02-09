@@ -55,6 +55,7 @@ _respond_text = (res, code, mime, text) ->
   data = new Buffer text, 'utf8'
   res.writeHead code, {
     'Content-Type': mime
+    'Content-Length': data.length
   }
   res.end data
 
