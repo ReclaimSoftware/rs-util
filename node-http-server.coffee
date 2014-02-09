@@ -13,6 +13,13 @@ respond_json = (res, code, x) ->
   _respond_text res, code, 'application/json', JSON.stringify x, null, 2
 
 
+respond_jsonp = (req, res, x) ->
+  {callback} = req.query
+  text = JSON.stringify x, null, 2
+  text = "#{callback}(#{text})" if callback
+  _respond_text res, 200, 'text/javascript', text
+
+
 respond_not_found = (res) ->
   res.status(404).render('404')
 
@@ -64,6 +71,7 @@ module.exports = {
   respond_error
   respond_js
   respond_json
+  respond_jsonp
   respond_not_found
   respond_storage_file
   respond_plain
