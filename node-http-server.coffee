@@ -6,13 +6,11 @@ respond_error = (res, error="") ->
 
 
 respond_js = (res, code, js) ->
-  res.writeHead code, {'Content-Type': 'application/javascript'}
-  res.end js
+  _respond_text res, code, 'application/javascript', js
 
 
 respond_json = (res, code, x) ->
-  res.writeHead code, {'Content-Type': 'application/json'}
-  res.end JSON.stringify x, null, 2
+  _respond_text res, code, 'application/json', JSON.stringify x, null, 2
 
 
 respond_not_found = (res) ->
@@ -50,8 +48,15 @@ respond_storage_file = ({req, res, storage, key, mime}) ->
 
 
 respond_plain = (res, code, text) ->
-  res.writeHead code, {'Content-Type': 'text/plain'}
-  res.end text
+  _respond_text res, code, 'text/plain', text
+
+
+_respond_text = (res, code, mime, text) ->
+  data = new Buffer text, 'utf8'
+  res.writeHead code, {
+    'Content-Type': mime
+  }
+  res.end data
 
 
 module.exports = {
