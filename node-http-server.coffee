@@ -6,7 +6,7 @@ respond_error = (res, error="") ->
 
 
 respond_js = (res, code, js) ->
-  _respond_text res, code, 'application/javascript', js
+  _respond_text res, code, 'text/javascript', js
 
 
 respond_json = (res, code, x) ->
