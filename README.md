@@ -33,6 +33,8 @@ intervalSet = (x, y) -> setInterval y, x
 
 read_stream stream, (data) ->
 read_fixed_size_chunks stream, chunk_size, (data) ->
+
+copy_buffer buf
 ````
 
 
@@ -40,9 +42,10 @@ read_fixed_size_chunks stream, chunk_size, (data) ->
 
 ```coffee
 
-respond_plain res, code, text # text/plain
-respond_js res, code, js      # application/javascript
-respond_json res, code, value # application/json, pretty-printed JSON of value
+respond_plain res, code, text   # text/plain
+respond_js res, code, js        # text/javascript
+respond_json res, code, value   # application/json, pretty-printed JSON of value
+respond_jsonp res, code, value  # text/javascript, "#{callback}(#{json})"
 respond_storage_file {req, res, storage, key, mime} # supports partial content!
 
 respond_error res, e          # res.status(500).render('500') and console.log
