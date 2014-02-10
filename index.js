@@ -4,6 +4,7 @@ var _ = require('underscore');
 var modules = [
     require('./js-misc'),
     require('./js-string'),
+    require('./node-buffers'),
     require('./node-http-server'),
     require('./node-http-client'),
     require('./node-misc')

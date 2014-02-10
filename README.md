@@ -23,6 +23,35 @@ lsplit_to_fixed_sized_chunks "1234567", 3   #-> ["123", "456", "7"]
 ```
 
 
+### Buffering data
+
+`start` and `end` refer to the entire stream of data, not what happens to be in the buffer.
+
+#### CircularBuffer
+
+```coffee
+cb = new CircularBuffer 200e6
+cb.append buf
+if cb.can_read_range start, end
+  cb.slice start, end
+```
+
+#### StreamBufferWithRecent
+
+```coffee
+sb = new StreamBufferWithRecent {stream, total_capacity, history_capacity}
+sb.wait_for_range {start, end, timeout: 1000}, () ->
+  if sb.can_read_range start, end
+    sb.slice start, end
+```
+
+Under the hood, `StreamBufferWithRecent` will
+
+- use a `CircularBuffer` with `total_capacity` bytes
+- pause/resume the stream as needed
+- maintain `history_capacity` bytes of history
+
+
 ### Misc
 
 ```coffee
